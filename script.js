@@ -119,7 +119,7 @@ class Example extends Phaser.Scene {
     this.maxDownwardSpeed = 10; // Maximum downward speed for fallen items
     this.energyRemainingText = null; // Initialize energy remaining text object
     this.energyRemainingTimer = null; // Initialize energy remaining timer
-    this.energyRemainingDuration = 75; // Initial energy remaining duration in seconds
+    this.energyRemainingDuration = 55; // Initial energy remaining duration in seconds
     this.cartControlInstructionsBox = null; // New semi-transparent black box for cart control instructions
     this.cartControlInstructionsText = null; // New text object for cart control instructions
     this.grizzlyBear = null; // Initialize the grizzly bear sprite
@@ -195,7 +195,7 @@ class Example extends Phaser.Scene {
     );
     this.load.image(
       "storeRight",
-      "https://play.rosebud.ai/assets/5b9e951f-e69c-4c8f-89e9-0d4fcb52f934.png?GBxv"
+      "https://play.rosebud.ai/assets/checkout.png?iM88"
     );
     this.load.image(
       "grizzlyBear",
@@ -206,7 +206,10 @@ class Example extends Phaser.Scene {
   create() {
     let bg = this.add.image(0, 0, "background");
     bg.setOrigin(0, 0);
-    bg.setScale(config.width / bg.width, config.height / bg.height);
+    bg.setScale(
+      this.game.config.width / bg.width,
+      this.game.config.height / bg.height
+    );
 
     let shelves = this.add.image(185, 35, "shelves");
     shelves.setOrigin(0, 0);
@@ -224,7 +227,7 @@ class Example extends Phaser.Scene {
 
     let cartWidth = 346 - 54;
     let cartHeight = 565 - 319;
-    this.cart = this.add.image(54, config.height, "cartB");
+    this.cart = this.add.image(54, this.game.config.height, "cartB");
     this.cart.setOrigin(0, 1);
     this.cart.setScale(
       cartWidth / this.cart.width,
@@ -302,7 +305,7 @@ class Example extends Phaser.Scene {
     });
 
     // Add semi-transparent black box for score text
-    const scoreBoxWidth = config.width; // Set the width to the full screen width
+    const scoreBoxWidth = this.game.config.width; // Set the width to the full screen width
     const scoreBoxHeight = 40; // Decrease the height to match the score text
     this.scoreBox = this.add
       .rectangle(0, 0, scoreBoxWidth, scoreBoxHeight, 0x000000, 0.5)
@@ -328,12 +331,12 @@ class Example extends Phaser.Scene {
       .setScrollFactor(0); // Set scrollFactor to 0 to keep the text in the same position
 
     // Add semi-transparent black box for instructions
-    const instructionsBoxWidth = config.width * 0.9; // Increase the width to 90% of the screen width
-    const instructionsBoxHeight = config.height * 0.5; // Increase the height to 50% of the screen height
+    const instructionsBoxWidth = this.game.config.width * 0.9; // Increase the width to 90% of the screen width
+    const instructionsBoxHeight = this.game.config.height * 0.5; // Increase the height to 50% of the screen height
     this.instructionsBox = this.add
       .rectangle(
-        config.width / 2,
-        config.height / 2,
+        this.game.config.width / 2,
+        this.game.config.height / 2,
         instructionsBoxWidth,
         instructionsBoxHeight,
         0x000000,
@@ -345,22 +348,27 @@ class Example extends Phaser.Scene {
     // Add instructions text with line spaces between instructions
     const instructionsText = `Assist Lucie in bringing her pottery to the checkout on time\n\nPress ENTER to start.`;
     this.instructionsText = this.add
-      .text(config.width / 2, config.height / 2, instructionsText, {
-        fontSize: "32px",
-        fill: "#C7F6FF",
-        align: "center",
-        wordWrap: { width: instructionsBoxWidth * 0.8 },
-      })
+      .text(
+        this.game.config.width / 2,
+        this.game.config.height / 2,
+        instructionsText,
+        {
+          fontSize: "32px",
+          fill: "#C7F6FF",
+          align: "center",
+          wordWrap: { width: instructionsBoxWidth * 0.8 },
+        }
+      )
       .setOrigin(0.5, 0.5)
       .setDepth(1002); // Set depth higher than the instructions box
 
     // Add semi-transparent black box for cart control instructions (initially not visible)
-    const cartControlInstructionsBoxWidth = config.width * 0.5; // Increase the width to 50% of the screen width
+    const cartControlInstructionsBoxWidth = this.game.config.width * 0.5; // Increase the width to 50% of the screen width
     const cartControlInstructionsBoxHeight = 40; // Set the height to match the cart control instructions text
     this.cartControlInstructionsBox = this.add
       .rectangle(
-        config.width / 2,
-        config.height - 30,
+        this.game.config.width / 2,
+        this.game.config.height - 30,
         cartControlInstructionsBoxWidth,
         cartControlInstructionsBoxHeight,
         0x000000,
@@ -373,10 +381,15 @@ class Example extends Phaser.Scene {
     // Add cart control instructions text (initially not visible)
     const cartControlInstructionsText = `Z/X Keys = Move cart left/right`;
     this.cartControlInstructionsText = this.add
-      .text(config.width / 2, config.height - 30, cartControlInstructionsText, {
-        fontSize: "20px",
-        fill: "#FFFFFF",
-      })
+      .text(
+        this.game.config.width / 2,
+        this.game.config.height - 30,
+        cartControlInstructionsText,
+        {
+          fontSize: "20px",
+          fill: "#FFFFFF",
+        }
+      )
       .setOrigin(0.5, 0.5)
       .setDepth(1004)
       .setVisible(false); // Set depth higher than the cart control instructions box, initially not visible
@@ -440,7 +453,7 @@ class Example extends Phaser.Scene {
 
     // Show a game over message centered on the camera view
     const gameOverBoxWidth = this.cameras.worldView.width * 0.9;
-    const gameOverBoxHeight = this.cameras.worldView.height * 0.3;
+    const gameOverBoxHeight = this.cameras.worldView.height * 0.6;
     const gameOverBox = this.add
       .rectangle(
         this.cameras.worldView.centerX,
@@ -456,7 +469,7 @@ class Example extends Phaser.Scene {
     this.add
       .text(
         this.cameras.worldView.centerX,
-        this.cameras.worldView.centerY,
+        this.cameras.worldView.centerY - 40,
         gameOverText,
         {
           fontSize: "32px",
@@ -467,6 +480,34 @@ class Example extends Phaser.Scene {
       )
       .setOrigin(0.5, 0.5)
       .setDepth(1002);
+
+    const nextButton = this.add
+      .text(
+        this.cameras.worldView.centerX,
+        this.cameras.worldView.centerY + 150,
+        "Next Level",
+        {
+          fontSize: "24px",
+          fill: "#FFFFFF",
+          backgroundColor: "#4CAF50",
+          padding: { left: 20, right: 20, top: 10, bottom: 10 },
+        }
+      )
+      .setOrigin(0.5, 0.5)
+      .setInteractive()
+      .setDepth(1003);
+
+    nextButton.on("pointerdown", () => {
+      this.scene.start("BootScene");
+    });
+
+    nextButton.on("pointerover", () => {
+      nextButton.setStyle({ backgroundColor: "#45a049" });
+    });
+
+    nextButton.on("pointerout", () => {
+      nextButton.setStyle({ backgroundColor: "#4CAF50" });
+    });
 
     // Hide the cart control instructions box and text
     this.cartControlInstructionsBox.setVisible(false);
@@ -654,7 +695,7 @@ class Example extends Phaser.Scene {
 
         // Destroy items that are fully below the screen
         this.fallenItems.forEach((item) => {
-          if (item.y > config.height) {
+          if (item.y > this.game.config.height) {
             item.destroy();
             delete this.fallenItemsPositions[item.texture.key];
             delete this.fallenItemsDropTimes[item.texture.key];
@@ -882,23 +923,164 @@ class Example extends Phaser.Scene {
   }
 }
 
-const config = {
-  type: Phaser.AUTO,
-  parent: "renderDiv",
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-  },
-  width: 800,
-  height: 600,
-  scene: [TitleScene, InstructionScene, Example],
-  physics: {
-    default: "matter",
-    matter: {
-      gravity: { y: 1 }, // Reduced the gravity force
-      debug: false,
-    },
-  },
-};
+const CHARACTER_NAME = "Lucie Rie";
 
-window.phaserGame = new Phaser.Game(config);
+// Describe your chatbot here. This defines exactly how it will behave.
+const CHARACTER_DESCRIPTION = `
+You are Lucie Rie, a renowned Austrian-born British studio potter whose work revolutionized ceramics in the 20th century.
+
+Information about you:
+
+Lucie Rie faced many challenges during her life, including fleeing Austria during World War II, but she transformed her hardships into groundbreaking ceramic art. She is approachable and enjoys sharing stories about her journey, from her early struggles to becoming a celebrated artist.
+
+First Message of Roleplay:
+
+"Welcome. Would you like to hear about my life and how I became a renowned potter? Feel free to ask me anything."
+
+NOTE: 
+(Ensure your responses are short so the player can respond. Engage the player by asking questions about Lucie Rie's life after every response.)
+`;
+
+// This is the URL of the image for your chatbot's background image.
+const BACKGROUND_IMAGE_URL = `https://play.rosebud.ai/assets/pottery-8026823_1280.jpg?5TyQ`;
+
+// This is the URL of the image for your chatbot.
+const CHARACTER_IMAGE_URL = `https://play.rosebud.ai/assets/profile-pic (25).png?zEZd`;
+
+// Put URLs of all songs you want to be shuffled in this game's playlist.
+const SONG_PLAYLIST_URLS = [`https://play.rosebud.ai/assets/song1.mp3?3YMc`];
+
+class BootScene extends Phaser.Scene {
+  constructor() {
+    super({ key: "BootScene" });
+  }
+
+  preload() {
+    // Preload audio files
+    SONG_PLAYLIST_URLS.forEach((url, index) => {
+      this.load.audio(`track_${index}`, url);
+    });
+
+    // Preload character image
+    this.load.image("characterImage", CHARACTER_IMAGE_URL);
+
+    // Preload background image
+    this.load.image("backgroundImage", BACKGROUND_IMAGE_URL);
+  }
+
+  create() {
+    // Initialize the music manager and other dependencies
+    this.game.musicManager = new MusicManager(this.game);
+    const musicKeys = SONG_PLAYLIST_URLS.map((_, index) => `track_${index}`);
+    this.game.musicManager.setPlaylist(musicKeys);
+    this.game.musicManager.playNextTrack();
+    this.game.musicManager.shufflePlaylist();
+    console.log(this.game.musicManager.playlist);
+
+    // Check for existing save and initialize the game state
+    this.checkForExistingSave();
+
+    // Add the background image
+    const background = this.add.image(
+      this.scale.width / 2,
+      this.scale.height / 2,
+      "backgroundImage"
+    );
+    background.setScale(0.5); // Adjust the scale as needed
+
+    // Create the character image sprite and decrease its size by 20%
+    const characterSprite = this.add.sprite(0, 0, "characterImage");
+    characterSprite.setScale(0.8); // Decrease the sprite size by 20%
+    characterSprite.setPosition(this.scale.width / 1, this.scale.height / 2);
+
+    // Add the text to the top of the screen
+    this.add
+      .text(400, 50, "Welcome to Lucie Rie - From Refugee to Renowned Potter", {
+        fontSize: "26px",
+        color: "#84eab3",
+        fontFamily: "Arial",
+        backgroundColor: "rgba(0,0,0,0.6)",
+      })
+      .setOrigin(0.5);
+
+    // Transition to another scene
+    this.game.sceneTransitionManager.transitionTo("ChatScene");
+  }
+
+  checkForExistingSave() {
+    const saveData = localStorage.getItem(PROJECT_NAME);
+    if (saveData) {
+      console.info("Save detected.");
+      this.game.saveData = JSON.parse(saveData);
+    } else {
+      console.info("No save detected. Initializing new game state.");
+      // If no save exists, initialize a new save with default values
+      this.game.saveData = {
+        chatLog: "",
+        characterChatManagerState: null, // Assuming a default empty state is suitable
+      };
+
+      // Save the initial state to localStorage
+      localStorage.setItem(PROJECT_NAME, JSON.stringify(this.game.saveData));
+    }
+  }
+}
+
+function loadScript(url) {
+  return new Promise((resolve, reject) => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = url;
+
+    script.onload = () => resolve();
+    script.onerror = () =>
+      reject(new Error("Script loading failed for " + url));
+
+    document.head.appendChild(script);
+  });
+}
+
+const VERSION_NUMBER = "v1"; // Set the version number here.
+const PROJECT_NAME = `${CHARACTER_NAME} AI Character ${VERSION_NUMBER}`;
+async function initializeGame() {
+  try {
+    // Load the external script before initializing the Phaser game
+    await loadScript(
+      `https://play.rosebud.ai/assets/rosebud_AI_character_template_desktop_library.js.js?BELO`
+    );
+    console.log("Script loaded successfully");
+
+    const config = {
+      type: Phaser.AUTO,
+      parent: "renderDiv",
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
+      width: 800,
+      height: 600,
+      scene: [TitleScene, InstructionScene, Example, BootScene, ChatScene],
+      dom: {
+        createContainer: true,
+      },
+      physics: {
+        default: "matter",
+        matter: {
+          gravity: { y: 1 }, // Reduced the gravity force
+          debug: false,
+        },
+      },
+    };
+
+    // Assuming 'game' is declared in a broader scope if you need to reference it elsewhere
+    window.game = new Phaser.Game(config);
+    window.game.sceneTransitionManager = new SceneTransitionManager(game);
+  } catch (error) {
+    console.error(
+      "Failed to load external script or initialize the Phaser game:",
+      error
+    );
+  }
+}
+
+initializeGame();
